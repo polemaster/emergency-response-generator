@@ -192,7 +192,6 @@ class Motorbike(Vehicle):
 
 class VehiclePosition:
     def __init__(self, vehicle, position, time):
-
         self.vehicle = vehicle
         self.position = position
         self.time = time

@@ -7,6 +7,7 @@ from incident import Incident
 from person import Officer, Victim
 from places import RandomPlaceGenerator
 from team import Team
+from utils.constants import AVERAGE_TEAM_TIME
 from utils.helpers import calculate_distance, random_range
 from utils.position import Position
 from vehicle import Car, Motorbike, VehiclePosition
@@ -117,6 +118,7 @@ class Generator:
         return result
 
     def update_teams(self):
+        # Iterate through all current teams
         for vehicle in self.vehicles:
             if vehicle.team is not None:
                 if vehicle.team_time <= 0:
@@ -154,12 +156,11 @@ class Generator:
 
         return team
 
-    def assign_team(self, vehicle, city):
+    def assign_team(self, vehicle):
         # In seconds => 8 hours = 28800s
-        AVARAGE_TEAM_TIME = 28800
 
         if vehicle.team is None:
-            officers = self.get_city_officers(city)
+            officers = self.get_city_officers(vehicle.city)
 
             chosen_officers = self.select_officers_to_team(vehicle, officers)
 
@@ -167,7 +168,7 @@ class Generator:
                 team = Team(vehicle, self.current_time, chosen_officers)
                 vehicle.team = team
                 vehicle.team_time = random_range(
-                    AVARAGE_TEAM_TIME * 0.75, AVARAGE_TEAM_TIME * 1.25, 4000
+                    AVERAGE_TEAM_TIME * 0.75, AVERAGE_TEAM_TIME * 1.25, 4000
                 )
                 self.teams.append(team)
 
@@ -179,22 +180,12 @@ class Generator:
         #   print("vehicle is full")
 
     def assign_teams(self):
-        for city in self.cities:
-            # Assign officers to vehicles within the city
-
-            # officers = self.get_city_officers(city)
-            vehicles = self.get_city_vehicles(city)
-
-            # print("Assign officers to vehicles within the city ", len(officers), len(vehicles))
-
-            for vehicle in vehicles:
-                self.assign_team(vehicle, city)
+        for vehicle in self.vehicles:
+            self.assign_team(vehicle)
 
     def assign_vehicle_to_incident(self, incident):
         closest_vehicle = None  # self.vehicles[0]
-        closest_dist = (
-            0  # calculate_distance(incident.position, closest_vehicle.position)
-        )
+        closest_dist = 0
 
         for vehicle in self.vehicles:
             if vehicle.assigned_incident is None and not vehicle.is_resolving_incident:
@@ -208,8 +199,8 @@ class Generator:
 
         if closest_vehicle is not None:
             closest_vehicle.assigned_incident = incident
-        # else:
-        # print("All vehicles are currently occupied")
+        else:
+            print("All vehicles are currently occupied")
 
     def generate_incidents(self):
         avarage_incidents = self.simulation_timestep / 3600 * self.incidents_per_hour
@@ -250,6 +241,8 @@ class Generator:
         iterations = int(time_diff.total_seconds() / self.simulation_timestep)
 
         timestep = timedelta(seconds=self.simulation_timestep)
+
+        self.current_time = start_datetime
 
         for i in range(iterations):
             self.save_vehicle_positions()
