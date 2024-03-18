@@ -13,7 +13,7 @@ from utils.constants import (
     OLDEST_CAR_YEAR,
     RANDOM_POS_STEP,
 )
-from utils.helpers import generate_licence_plate, generate_random_date, random_range
+from utils.helpers import generate_licence_plate, generate_random_date, random_range, clamp
 from utils.position import Position
 
 
@@ -116,7 +116,12 @@ class Vehicle:
                 # Calculate arrival time depending on travelled distance to distance to incident proportions
                 distances_ratio = dist_to_incident / step_distance
 
-                self.assigned_incident.arrival_datetime = current_time + timedelta(
+                latest_timepoint = current_time
+                
+                if self.assigned_incident.report_datetime and self.assigned_incident.report_datetime > current_time:
+                  latest_timepoint = self.assigned_incident.report_datetime
+
+                self.assigned_incident.arrival_datetime = latest_timepoint + timedelta(
                     seconds=simulation_timestep * distances_ratio
                 )
 
@@ -146,16 +151,20 @@ class Vehicle:
                 # print("Incident nr {} resolved".format(vehicle.assigned_incident.incident_id))
 
                 # In seconds 30min => 1800s
-                AVG_SATISFACTORY_ARRIVAL_TIME = 1800
+                AVG_SATISFACTORY_ARRIVAL_TIME = 1200
                 arrival_time = (
                     self.assigned_incident.arrival_datetime
                     - self.assigned_incident.report_datetime
                 ).seconds
+                
+                # Prevent arrival_time == 0
+                if arrival_time == 0:
+                  arrival_time = 1
 
-                # ratio = AVG_SATISFACTORY_ARRIVAL_TIME / arrival_time
+                ratio = AVG_SATISFACTORY_ARRIVAL_TIME / arrival_time
 
-                # satisfaction_score = clamp(random.gauss(5 * ratio, 10), 1, 10)
-                satisfaction_score = 8
+                satisfaction_score = clamp(random.gauss(6 * ratio, 2), 1, 10)
+                # satisfaction_score = 8
 
                 self.assigned_incident.victim_satisfaction = satisfaction_score
 

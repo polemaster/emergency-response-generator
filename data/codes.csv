@@ -1,0 +1,199 @@
+14, Ambulance in route
+15, Citizens holding suspect
+17F, Fugitive attachment
+17M, Municipal court attachment
+17T, Traffic attachment
+18, Traffic incident
+19, Drunk
+20, Auto accident
+20I, Injury accident
+20A, Airplane crash
+20F, Fatal accident
+21, Complaint
+23, Traffic congestion
+24, Medical emergency
+25, Call dispatcher
+26, Police officer
+27, Attempted crime
+28, Inciting a felony
+29, Death
+30, Homicide
+30C, Homicide by cutting
+30S, Homicide by shooting
+32, Accessory to a felony
+34, Aggravated battery
+34C, Cutting
+34S, Shooting
+35, Simple battery
+37, Aggravated assault
+38, Simple assault
+39, Negligent injury
+42, Aggravated rape
+43, Simple rape
+44, Aggravated kidnapping
+45, Simple kidnapping
+51, Aggravated arson
+51B, Bomb threat
+52, Simple arson
+52E, Explosives
+52F, Fire
+54, Combustible materials
+56, Criminal damage
+58, Contaminated water
+59, Criminal Mischief
+60, Aggravated burglary
+62, Alarms
+62B, Simple burglary
+62C, Auto burglary
+62R, Residential burglary
+62S, Safe burglary
+63, Criminal Trespass
+63S, Sit-in
+64, Armed robbery
+64G, Armed robbery/gun
+64K, Armed robbery/knife
+65, Simple robbery
+65P, Purse snatching
+66, Extortion threats
+67, Offer a bribe to executive officer
+68, Unauthorized use of a movable
+69, Deter/resist executive officer (other than peace officer)
+69, Possession of stolen goods
+71, Issuing worthless checks
+71, Threaten injury to school officer or employee
+72, Forgery
+80, Carnal knowledge of juvenile
+81, Indecent behavior with juvenile
+82, Prostitution
+84, Pandering
+87, Abortion
+89, Crime against nature
+90, Gambling
+90C, Gambling - cards
+90D, Gambling - dice
+91, Unlawful sale to minor
+93, Cruelty to juvenile
+94, Illegal use of weapon
+95, Illegal carrying of gun
+98, Driving while intoxication (DWI)
+99, Reckless operation
+100, Hit and run
+102, Take or destroy property in custody of officer
+118, Perjury
+136.1(A), Intimidation of witness or victim
+136.1(B1), Intimidation of witness or victim from reporting crime
+136.1(C1), Intimidation of witness or victim by force/threat of violence
+137(a), Offer bribe to influence testimony
+146a, Impersonating a peace officer
+148, Interfering with an officer
+148, Resisting Arrest
+148.1, False report of a bomb
+148.5, False report of a crime
+150, Refuse to aid an officer
+151(A1), Advocate killing/injuring officer
+187, Homicide
+192.1, Voluntary manslaughter
+192.2, Involuntary manslaughter
+192.3, Vehicular manslaughter
+203, Mayhem
+207, Kidnapping
+207A, Kidnapping attempt
+209A, Kidnapping for ransom/extortion
+209B, Kidnapping for robbery
+211, Robbery
+211A, Robbery alarm
+211S, Robbery alarm - silent
+217, Assault with intent to murder
+220, Assault with intent to mayhem/sex crime
+236, False imprisonment
+240, Assault - Misdemeanor
+241, Assault on peace officer/EMT/firefighter
+242, Battery
+243, Assault on Police Officer
+243A, Battery against a citizen
+243B, Battery against a peace officer
+244, Throwing acid with intent to disfigure or burn
+245, Assault with a deadly weapon
+245B, Assault with a deadly weapon against a peace officer
+246, Shooting at an inhabited dwelling or vehicle
+261, Rape
+261.5, Rape - under 18 years of age
+261A, Attempted rape
+262, Rape of spouse
+266H, Pimping
+266I, Pandering
+270, Child neglect/failing to pay the support payments
+271, Child abandonment - under 14
+272, Contributing to the delinquency of a minor
+273, Assault on Person
+273.5A, Corporal injury to spouse/cohabitant
+273A, Child neglect
+273D, Corporal injury upon child
+273D, Wife beating - Felony
+278, Child abduction from parent or guardian
+285, Sex crimes against family member(s)
+288, Lewd Conduct / Felony sex offense
+288, Sex offense against a child
+288A, Oral copulation
+290, Sex registration
+311, Loud and Obscene
+311.2A, Possession of obscene matter
+311.2B, Possessing obscene matter depicting a minor
+314, Indecent exposure
+330, Gambling
+373, Public nuisance misdemeanors (spitting in public places - etc.)
+374B, Garbage dumping
+374B, Illegal dumping
+390, Drunk
+390C, Drunk in Vehicle
+390D, Drunk - unconscious
+402B, Abandoned refrigerator
+404, Riot
+407, Unlawful Assembly
+415, Disturbing the peace
+415B, Investigate the Trouble
+415C, Disturbance - Children involved
+415D, Disturbance - Drunk involved
+415E, Loud Music or Party
+415F, Disturbance - Family
+415G, Disturbance - Gang
+417, Person with a gun
+417A, Person with a knife
+447, Arson
+451, Arson
+459, Burglary
+459A, Burglar Alarm - audible
+459S, Burglar Alarm - silent
+464, Burglary with Explosives
+470, Forgery
+476A, Insufficient funds (checks)
+477A, Arson
+480, Hit and Run - Felony
+481, Hit and Run - Misdemeanor
+484, Petty theft
+484E, Theft of a credit card
+484fF, Forged credit card
+484G, Illegal use of a credit card
+484PS, Purse Snatch
+487, Grand Theft ($400+)
+487.2, Theft from Person or Purse snatch
+488, Petty theft (<$400)
+496, Receiving stolen property
+499B, Joyriding
+502, Drunk Driving
+503, Auto theft
+503, Embezzlement
+504, Tampering with a vehicle
+505, Reckless driving
+507, Public nuisance
+510, Speeding or racing vehicles
+537, Defrauding Innkeeper
+537, Nonpayment of a bill (Restaurants - etc.)
+537E, Article with serial number removed
+555, Posted trespass
+586, Illegal parking
+586E, Vehicle blocking Driveway
+594, Malicious mischief
+594, Vandalism
+595, Runaway car
+597, Killing or abusing animals

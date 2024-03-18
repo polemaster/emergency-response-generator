@@ -215,7 +215,7 @@ class Generator:
         avarage_incidents = self.simulation_timestep / 3600 * self.incidents_per_hour
         # Here, higher random range of 50%
         incidents_count = int(
-            random_range(int(avarage_incidents * 0.5), int(avarage_incidents * 1.5), 1)
+            random_range(int(avarage_incidents * 0.5), int(avarage_incidents * 1.5))
         )
         # print(incidents_count)
 
@@ -260,4 +260,4 @@ class Generator:
             self.update_teams()
             self.assign_teams()
 
-            self.current_time = start_datetime + i * timestep
+            self.current_time += timestep
