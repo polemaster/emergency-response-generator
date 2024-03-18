@@ -1,33 +1,17 @@
 import random
 from datetime import timedelta
 
-from numpy import loadtxt
-from utils.constants import MAX_OFFICER_AGE, MAX_OFFICER_HIRE_TIME, MIN_OFFICER_AGE
+from utils.constants import (
+    GENDERS,
+    LAST_NAMES,
+    MAX_OFFICER_AGE,
+    MAX_OFFICER_HIRE_TIME,
+    MIN_OFFICER_AGE,
+    NAMES_FEMALE,
+    NAMES_MALE,
+    RANKS,
+)
 from utils.helpers import generate_phone_number, generate_random_date
-
-names_male = loadtxt("./data/polish_male_firstnames.txt", dtype="str")
-names_female = loadtxt("./data/polish_female_firstnames.txt", dtype="str")
-surnames = loadtxt("./data/polish_surnames.txt", dtype="str")
-genders = ["female", "male"]
-ranks = [
-    "Constable",
-    "Senior constable",
-    "Sergeant",
-    "Senior sergeant",
-    "Staff sergeant",
-    "Junior aspirant",
-    "Aspirant",
-    "Senior aspirant",
-    "Staff aspirant",
-    "Deputy commissioner",
-    "Commissioner",
-    "Chief commissioner",
-    "Deputy inspector",
-    "Junior inspector",
-    "Inspector",
-    "Chief inspector",
-    "Inspector general",
-]
 
 
 class Person:
@@ -38,14 +22,14 @@ class Person:
 
 
 def generate_personal_info():
-    gender = random.choice(genders)
-    surname = random.choice(surnames)
+    gender = random.choice(GENDERS)
+    surname = random.choice(LAST_NAMES)
     first_name = ""
 
     if gender == "male":
-        first_name = random.choice(names_male)
+        first_name = random.choice(NAMES_MALE)
     else:
-        first_name = random.choice(names_female)
+        first_name = random.choice(NAMES_FEMALE)
 
     return {"gender": gender, "first_name": first_name, "last_name": surname}
 
@@ -68,7 +52,7 @@ class Officer:
         self.officer_id = id
         self.first_name = personal_info["first_name"]
         self.last_name = personal_info["last_name"]
-        self.rank = random.choice(ranks)
+        self.rank = random.choice(RANKS)
         self.gender = personal_info["gender"]
         self.date_of_birth = date_of_birth
         self.hire_date = hire_date

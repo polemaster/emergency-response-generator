@@ -211,23 +211,13 @@ class Generator:
         # print(incidents_count)
 
         for _ in range(incidents_count):
-            city_name, district_name, selected_point = (
-                self.place_gen.select_random_place()
-            )
-            position = Position(selected_point[0], selected_point[1])
-
-            incident_datetime = self.current_time + timedelta(
-                seconds=self.simulation_timestep * random_range(0, 1, 1000)
-            )
             # TODO Should add victims to incident
 
             incident = Incident(
                 len(self.incidents),
-                city_name,
-                district_name,
-                incident_datetime,
-                None,
-                position,
+                self.current_time,
+                self.simulation_timestep,
+                self.place_gen,
             )
             self.generate_victims_for_incident(incident)
 

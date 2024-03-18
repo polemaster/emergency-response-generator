@@ -24,6 +24,8 @@ def main():
     end = time.time()
     print("Time:", end - start)
 
+    print(generator.incidents[0].type_code)
+
 
 if __name__ == "__main__":
     main()
