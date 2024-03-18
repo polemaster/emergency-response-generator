@@ -1,28 +1,15 @@
-import math
 import random
 from datetime import timedelta
 
 import numpy as np
+from city import City
 from incident import Incident
 from person import Officer, Victim
 from places import RandomPlaceGenerator
 from team import Team
-from utils.constants import (
-    DEFAULT_VEHICLE_SPEED,
-    INCIDENT_RESOLUTION_TIME,
-    MERCATOR_PER_METER,
-    RANDOM_POS_STEP,
-)
-from utils.helpers import random_range
+from utils.helpers import calculate_distance, random_range
 from utils.position import Position
 from vehicle import Car, Motorbike, VehiclePosition
-
-
-class City:
-    def __init__(self, city_name, top_left, bottom_right):
-        self.city_name = city_name
-        self.top_left = top_left
-        self.bottom_right = bottom_right
 
 
 class Generator:
@@ -67,6 +54,8 @@ class Generator:
             City("Krakow", Position(50.1233, 19.8094), Position(49.9737, 20.2150))
         )
 
+        self.place_gen = RandomPlaceGenerator()
+
     def generate_initial_data(self):
         for c_i, city in enumerate(self.cities):
             for i in range(0, self.initial_counts["officers"][c_i]):
@@ -81,131 +70,9 @@ class Generator:
                 motorbike = Motorbike(city, self.current_time)
                 self.vehicles.append(motorbike)
 
-    def move_vehicle(self, vehicle):
-        if vehicle.team == None:
-            return
-
-        DELTA_MERCATOR_MAIN = (
-            self.simulation_timestep * DEFAULT_VEHICLE_SPEED * MERCATOR_PER_METER
-        )
-
-        if vehicle.assigned_incident == None and vehicle.is_resolving_incident == False:
-            # Going randomly, not occupied
-            delta_lng = 0
-            delta_lat = 0
-
-            axis = random.choice([True, False])
-            direction = random.choice([-1, 1])
-
-            distance = (
-                random.randrange(
-                    int(DELTA_MERCATOR_MAIN / RANDOM_POS_STEP * 0.75),
-                    int(DELTA_MERCATOR_MAIN / RANDOM_POS_STEP * 1.25) + 1,
-                    1,
-                )
-                * RANDOM_POS_STEP
-            )
-
-            # print(DELTA_MERCATOR_MAIN)
-            if axis:
-                delta_lng = distance * direction
-            else:
-                delta_lat = distance * direction
-
-            # Check city boudaries
-
-            if (
-                vehicle.position.lng + delta_lng < vehicle.city.top_left.lng
-                or vehicle.position.lng + delta_lng > vehicle.city.bottom_right.lng
-                or vehicle.position.lat + delta_lat < vehicle.city.bottom_right.lat
-                or vehicle.position.lat + delta_lat > vehicle.city.top_left.lat
-            ):
-                # We inverse the direction
-                direction = -1 * direction
-
-            vehicle.position.lng += delta_lng
-            vehicle.position.lat += delta_lat
-        elif (
-            vehicle.assigned_incident != None and vehicle.is_resolving_incident == False
-        ):
-            # Goes to the incident
-
-            d_lat = vehicle.assigned_incident.position.lat - vehicle.position.lat
-            d_lng = vehicle.assigned_incident.position.lng - vehicle.position.lng
-            dist_to_incident = math.sqrt((d_lat) ** 2 + (d_lng) ** 2)
-
-            step_distance = (
-                random.randrange(
-                    int(DELTA_MERCATOR_MAIN / RANDOM_POS_STEP * 0.75),
-                    int(DELTA_MERCATOR_MAIN / RANDOM_POS_STEP * 1.25) + 1,
-                    1,
-                )
-                * RANDOM_POS_STEP
-            )
-
-            if step_distance > dist_to_incident:
-                vehicle.position.lat = vehicle.assigned_incident.position.lat
-                vehicle.position.lng = vehicle.assigned_incident.position.lng
-
-                # Calculate arrival time depending on travelled distance to distance to incident proportions
-                distances_ratio = dist_to_incident / step_distance
-
-                vehicle.assigned_incident.arrival_datetime = (
-                    self.current_time
-                    + timedelta(seconds=self.simulation_timestep * distances_ratio)
-                )
-
-                vehicle.is_resolving_incident = True
-                vehicle.time_till_resolved = random_range(
-                    INCIDENT_RESOLUTION_TIME * 0.5, INCIDENT_RESOLUTION_TIME * 1.5
-                )
-
-                # print("Stop and handle incident, time left: ", vehicle.time_till_resolved)
-            else:
-                dir_lat = d_lat / dist_to_incident
-                dir_lng = d_lng / dist_to_incident
-
-                vehicle.position.lat += dir_lat * step_distance
-                vehicle.position.lng += dir_lng * step_distance
-
-                # print("Moved, distance to incident = ", dist_to_incident)
-        elif (
-            vehicle.assigned_incident != None and vehicle.is_resolving_incident == True
-        ):
-            # Is resolving incident
-            vehicle.time_till_resolved -= self.simulation_timestep
-
-            # print("counter decreases, time left = {}".format(vehicle.time_till_resolved))
-
-            if vehicle.time_till_resolved <= 0:
-                # Resolved Incident
-
-                # print("Incident nr {} resolved".format(vehicle.assigned_incident.incident_id))
-
-                # In seconds 30min => 1800s
-                AVG_SATISFACTORY_ARRIVAL_TIME = 1800
-                arrival_time = (
-                    vehicle.assigned_incident.arrival_datetime
-                    - vehicle.assigned_incident.report_datetime
-                ).seconds
-
-                # ratio = AVG_SATISFACTORY_ARRIVAL_TIME / arrival_time
-
-                # satisfaction_score = clamp(random.gauss(5 * ratio, 10), 1, 10)
-                satisfaction_score = 8
-
-                vehicle.assigned_incident.victim_satisfaction = satisfaction_score
-
-                vehicle.time_till_resolved = 0
-                vehicle.is_resolving_incident = False
-                vehicle.assigned_incident = None
-
-                # TODO Move proportionally to the time left
-                # TODO Update incident with satisfaction score
-
     def move_vehicles(self):
         for vehicle in self.vehicles:
-            self.move_vehicle(vehicle)
+            vehicle.move_vehicle(self.simulation_timestep, self.current_time)
 
     def generate_victims_for_incident(self, incident):
         victims_count = np.random.poisson(lam=0.4, size=1)[0] + 1
@@ -227,10 +94,10 @@ class Generator:
         resolving = 0
 
         for vehicle in self.vehicles:
-            if vehicle.assigned_incident != None:
+            if vehicle.assigned_incident is not None:
                 assigned += 1
 
-            if vehicle.is_resolving_incident == True:
+            if vehicle.is_resolving_incident:
                 resolving += 1
 
     def get_city_officers(self, city):
@@ -251,7 +118,7 @@ class Generator:
 
     def update_teams(self):
         for vehicle in self.vehicles:
-            if vehicle.team != None:
+            if vehicle.team is not None:
                 if vehicle.team_time <= 0:
                     # FIX END DATE could be varying within timestep
                     vehicle.team.end_datetime = self.current_time
@@ -274,7 +141,7 @@ class Generator:
             officer_count = random.choice([1, 2, 3])
 
         for officer in officers:
-            if officer.team == None:
+            if officer.team is None:
                 available.append(officer)
 
         if officer_count <= len(available):
@@ -291,7 +158,7 @@ class Generator:
         # In seconds => 8 hours = 28800s
         AVARAGE_TEAM_TIME = 28800
 
-        if vehicle.team == None:
+        if vehicle.team is None:
             officers = self.get_city_officers(city)
 
             chosen_officers = self.select_officers_to_team(vehicle, officers)
@@ -330,19 +197,16 @@ class Generator:
         )
 
         for vehicle in self.vehicles:
-            if (
-                vehicle.assigned_incident == None
-                and vehicle.is_resolving_incident == False
-            ):
+            if vehicle.assigned_incident is None and not vehicle.is_resolving_incident:
                 distance = calculate_distance(incident.position, vehicle.position)
 
-                if closest_vehicle == None or distance < closest_dist:
+                if closest_vehicle is None or distance < closest_dist:
                     closest_dist = distance
                     closest_vehicle = vehicle
 
         # We know the closest vehicle to the incident, now we assign it
 
-        if closest_vehicle != None:
+        if closest_vehicle is not None:
             closest_vehicle.assigned_incident = incident
         # else:
         # print("All vehicles are currently occupied")
@@ -356,8 +220,9 @@ class Generator:
         # print(incidents_count)
 
         for _ in range(incidents_count):
-            place_gen = RandomPlaceGenerator()
-            city_name, district_name, selected_point = place_gen.select_random_place()
+            city_name, district_name, selected_point = (
+                self.place_gen.select_random_place()
+            )
             position = Position(selected_point[0], selected_point[1])
 
             incident_datetime = self.current_time + timedelta(

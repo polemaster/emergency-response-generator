@@ -4,12 +4,10 @@ from datetime import timedelta
 
 
 def generate_phone_number():
-    area_codes = ["12", "13"]
+    first_digit = random.choice(["4", "5", "6", "7", "8"])
+    other_digits = "".join(random.choices("0123456789", k=8))
 
-    area_code = random.choice(area_codes)
-    number = "".join(random.choices("0123456789", k=7))
-
-    return f"{area_code} {number[:3]} {number[3:]}"
+    return first_digit + other_digits
 
 
 def generate_random_date(start_date, end_date):
@@ -55,4 +53,4 @@ def clamp(n, min, max):
 
 
 if __name__ == "__main__":
-    main()
+    print(generate_phone_number())
