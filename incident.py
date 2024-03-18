@@ -14,3 +14,15 @@ class Incident:
         self.position = position
 
         self.victims = list()
+
+
+class IncidentTeamAssignments:
+    def __init__(self):
+        self.team = None
+        self.incident = None
+
+
+class VictimGroups:
+    def __init__(self):
+        self.victim = None
+        self.incident = None

@@ -1,3 +1,4 @@
+import random
 from datetime import datetime
 
 from generator import Generator
@@ -5,6 +6,7 @@ from utils.constants import INITIAL_COUNTS
 
 
 def main():
+    random.seed(42)
     import time
 
     start = time.time()
