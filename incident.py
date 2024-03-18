@@ -17,12 +17,12 @@ class Incident:
 
 
 class IncidentTeamAssignments:
-    def __init__(self):
-        self.team = None
-        self.incident = None
+    def __init__(self, incident_id, team_id):
+        self.incident_id = incident_id
+        self.team_id = team_id
 
 
 class VictimGroups:
-    def __init__(self):
-        self.victim = None
-        self.incident = None
+    def __init__(self, victim_id, incident_id):
+        self.victim_id = victim_id
+        self.incident_id = incident_id

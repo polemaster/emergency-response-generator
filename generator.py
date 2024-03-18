@@ -3,12 +3,12 @@ from datetime import timedelta
 
 import numpy as np
 from city import City
-from incident import Incident
+from incident import Incident, IncidentTeamAssignments, VictimGroups
 from person import Officer, Victim
 from places import RandomPlaceGenerator
 from team import Team
 from utils.constants import AVERAGE_TEAM_TIME
-from utils.helpers import calculate_distance, random_range
+from utils.helpers import calculate_distance, random_range, clamp
 from utils.position import Position
 from vehicle import Car, Motorbike, VehiclePosition
 
@@ -31,6 +31,10 @@ class Generator:
 
         self.teams = list()
         self.vehicle_positions = list()
+        
+        
+        self.incident_team_assignments = list()
+        self.victim_groups = list()
 
         self.current_time = initial_date
 
@@ -80,6 +84,10 @@ class Generator:
 
         for _ in range(victims_count):
             victim = Victim(len(self.victims), self.current_time)
+            
+            victim_grouping = VictimGroups(victim.victim_id, incident.incident_id)
+            self.victim_groups.append(victim_grouping)
+            
             self.victims.append(victim)
             incident.victims.append(victim)
 
@@ -165,7 +173,7 @@ class Generator:
             chosen_officers = self.select_officers_to_team(vehicle, officers)
 
             if len(chosen_officers) > 0:
-                team = Team(vehicle, self.current_time, chosen_officers)
+                team = Team(len(self.teams), vehicle, self.current_time, chosen_officers)
                 vehicle.team = team
                 vehicle.team_time = random_range(
                     AVERAGE_TEAM_TIME * 0.75, AVERAGE_TEAM_TIME * 1.25, 4000
@@ -188,7 +196,7 @@ class Generator:
         closest_dist = 0
 
         for vehicle in self.vehicles:
-            if vehicle.assigned_incident is None and not vehicle.is_resolving_incident:
+            if vehicle.assigned_incident is None and vehicle.team and not vehicle.is_resolving_incident:
                 distance = calculate_distance(incident.position, vehicle.position)
 
                 if closest_vehicle is None or distance < closest_dist:
@@ -199,6 +207,9 @@ class Generator:
 
         if closest_vehicle is not None:
             closest_vehicle.assigned_incident = incident
+            
+            incident_team_assignment = IncidentTeamAssignments(incident.incident_id, closest_vehicle.team.team_id)
+            self.incident_team_assignments.append(incident_team_assignment)
         else:
             print("All vehicles are currently occupied")
 
@@ -231,8 +242,11 @@ class Generator:
             )
             self.generate_victims_for_incident(incident)
 
-            # TODO Should assign car team to incident and add victims
-            self.assign_vehicle_to_incident(incident)
+            required_teams_count = clamp(np.random.poisson(lam=0.3, size=1)[0] + 1, 1, 3)
+            # print(required_teams_count)
+            
+            for _ in range(required_teams_count):
+              self.assign_vehicle_to_incident(incident)
 
             self.incidents.append(incident)
 
