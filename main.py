@@ -1,4 +1,5 @@
 import random
+import numpy as np
 from datetime import datetime
 
 from exporter import Exporter
@@ -7,7 +8,9 @@ from utils.constants import INITIAL_COUNTS
 
 
 def main():
-    random.seed(42)
+    SEED = 42
+    np.random.seed(SEED)
+    random.seed(SEED)
     import time
 
     start = time.time()
