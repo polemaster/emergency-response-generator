@@ -6,7 +6,7 @@ from city import City
 from incident import Incident, IncidentTeamAssignments, VictimGroups
 from person import Officer, Victim
 from places import RandomPlaceGenerator
-from team import Team
+from team import Team, TeamOfficersAssignment
 from utils.constants import AVERAGE_TEAM_TIME, AVG_INSPECTIONS_SPAN
 from utils.constants import AVERAGE_TEAM_TIME, AVG_INSPECTIONS_SPAN
 from utils.helpers import calculate_distance, random_range, clamp
@@ -34,6 +34,7 @@ class Generator:
 
         self.teams = list()
         self.vehicle_positions = list()
+        self.team_officer_assignments = list()
 
         self.incident_team_assignments = list()
         self.victim_groups = list()
@@ -194,6 +195,8 @@ class Generator:
 
                 for officer in chosen_officers:
                     officer.team = team
+                    team_officer_pair = TeamOfficersAssignment(team.team_id, officer.officer_id)
+                    self.team_officer_assignments.append(team_officer_pair)
             # else:
             # print("No more available officers")
         # else:

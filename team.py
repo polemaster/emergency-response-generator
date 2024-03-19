@@ -7,3 +7,9 @@ class Team:
         self.license_plate_number = license_plate_number
 
         self.officers = officers
+
+class TeamOfficersAssignment:
+  def __init__(self, team_id, officer_id):
+
+      self.team_id = team_id
+      self.officer_id = officer_id
