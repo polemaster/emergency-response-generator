@@ -2,11 +2,11 @@ import csv
 import os
 import shutil
 
-from utils.constants import CODES_FILEPATH
+from utils.constants import CODES, CODES_FILEPATH
 
 
 class Exporter:
-    def __init__(self, generator, directory, include_headers=True):
+    def __init__(self, generator, directory, include_headers=False):
         self.directory = directory
         # create a directory if it doesn't already exist
         os.makedirs(directory, exist_ok=True)
@@ -26,7 +26,7 @@ class Exporter:
         self.copy_incident_types("incident_types.csv")
         self.export_victim_groups("victim_groups.csv")
         self.export_incident_team_assignments("incident_team_assignments.csv")
-        self.export_team_officer_assignments_sql("team_officer_assignments_sql.csv")
+        self.export_team_officer_assignments("team_officer_assignments.csv")
 
     def export_incidents(self, filename):
         filepath = os.path.join(self.directory, filename)
@@ -99,20 +99,10 @@ class Exporter:
 
     def export_vehicles_csv(self, filename):
         filepath = os.path.join(self.directory, filename)
-        headers = [
-            "license_plate_number",
-            "type",
-            "brand",
-            "model",
-            "manufacturing_year",
-        ]
 
         # Open the CSV file in write mode
         with open(filepath, "w", newline="") as csvfile:
             writer = csv.writer(csvfile)
-
-            if self.include_headers:
-                writer.writerow(headers)
 
             for vehicle in self.generator.vehicles:
                 row_data = [
@@ -157,13 +147,7 @@ class Exporter:
         headers = ["team_id", "start_datetime", "end_datetime", "license_plate_number"]
 
         self.write_objects_to_csv(self.generator.teams, headers, filepath)
-        
-    def export_team_officer_assignments_sql(self, filename):
-        filepath = os.path.join(self.directory, filename)
-        headers = ["team_id", "officer_id"]
 
-        self.write_objects_to_csv(self.generator.team_officer_assignments, headers, filepath)
-  
     def export_victims_sql(self, filename):
         filepath = os.path.join(self.directory, filename)
         headers = ["victim_id", "first_name", "last_name"]
@@ -174,7 +158,10 @@ class Exporter:
         filepath = os.path.join(self.directory, filename)
         headers = ["victim_id", "first_name", "last_name", "gender", "date_of_birth"]
 
+        temp = self.include_headers
+        self.include_headers = True
         self.write_objects_to_csv(self.generator.victims, headers, filepath)
+        self.include_headers = temp
 
     def export_officers_sql(self, filename):
         filepath = os.path.join(self.directory, filename)
@@ -196,11 +183,14 @@ class Exporter:
             "phone_number",
         ]
 
+        temp = self.include_headers
+        self.include_headers = True
         self.write_objects_to_csv(self.generator.officers, headers, filepath)
+        self.include_headers = temp
 
     def copy_incident_types(self, filename):
         filepath = os.path.join(self.directory, filename)
-        shutil.copy(CODES_FILEPATH, filepath)
+        CODES.to_csv(filepath, header=False, index=False, mode="w")
 
     def export_victim_groups(self, filename):
         filepath = os.path.join(self.directory, filename)
@@ -214,4 +204,12 @@ class Exporter:
 
         self.write_objects_to_csv(
             self.generator.incident_team_assignments, headers, filepath
+        )
+
+    def export_team_officer_assignments(self, filename):
+        filepath = os.path.join(self.directory, filename)
+        headers = ["team_id", "officer_id"]
+
+        self.write_objects_to_csv(
+            self.generator.team_officer_assignments, headers, filepath
         )

@@ -98,6 +98,19 @@ def assign_weights(cities):
             district_weights[(city.name, district.name)] = (
                 district.total_area / city.total_area
             )
+    # set some district to be have more weight (be more likely) because of other factors (poor people, etc.)
+    district_weights[("Gdańsk", "Nowy Port")] *= 2.5
+    district_weights[("Gdańsk", "Przymorze Małe")] /= 2
+    district_weights[("Gdańsk", "Przymorze Wielkie")] /= 2
+    district_weights[("Gdańsk", "Śródmieście")] *= 2
+
+    district_weights[("Warszawa", "Praga-Południe")] *= 2.5
+    district_weights[("Warszawa", "Praga-Północ")] *= 1.5
+    district_weights[("Warszawa", "Wola")] /= 2
+
+    district_weights[("Kraków", "Dzielnica XVIII Nowa Huta")] *= 2
+    district_weights[("Kraków", "Dzielnica I Stare Miasto")] *= 3
+    district_weights[("Kraków", "Dzielnica X Swoszowice")] /= 2
 
     return city_weights, district_weights
 
@@ -151,24 +164,14 @@ class RandomPlaceGenerator:
 def main():
     g = RandomPlaceGenerator()
 
-    # print("city weights:", city_weights)
-    # print("district_weights:", district_weights)
+    print(g.district_weights[("Gdańsk", "Nowy Port")])
 
-    final_list = []
-
-    start = time.time()
-    # Random selection
-    n = 100_000
-    for _ in range(n):
-        selected_place = g.select_random_place()
-        final_list.append(selected_place)
-    end = time.time()
-    print(f"Time of {n} selections: ", end - start)
-
-    selected_place = g.select_random_place()
-    print("Selected City:", selected_place[0])
-    print("Selected District:", selected_place[1])
-    print("Selected Point within Rectangle:", selected_place[2])
+    places = []
+    for _ in range(100):
+        place = g.select_random_place()
+        if place[0] == "Gdańsk":
+            places.append(place[1])
+    print(places)
 
 
 if __name__ == "__main__":

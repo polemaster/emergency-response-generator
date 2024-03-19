@@ -6,13 +6,13 @@ import random
 from datetime import timedelta
 
 from utils.constants import (
+    AVG_INSPECTIONS_SPAN,
     DEFAULT_VEHICLE_SPEED,
     EARLIEST_CAR_YEAR,
     INCIDENT_RESOLUTION_TIME,
     MERCATOR_PER_METER,
     OLDEST_CAR_YEAR,
     RANDOM_POS_STEP,
-    AVG_INSPECTIONS_SPAN
 )
 from utils.helpers import (
     clamp,
@@ -56,8 +56,10 @@ class Vehicle:
 
         # In seconds, 0 = to be freed
         self.team_time = 0
-        
-        self.time_till_inspection = random_range(int(AVG_INSPECTIONS_SPAN * 0.75), int(AVG_INSPECTIONS_SPAN * 1.25), 1)
+
+        self.time_till_inspection = random_range(
+            int(AVG_INSPECTIONS_SPAN * 0.75), int(AVG_INSPECTIONS_SPAN * 1.25), 1
+        )
 
     def move_vehicle(self, simulation_timestep, current_time):
         if self.team is None:
@@ -176,7 +178,7 @@ class Vehicle:
 
                 ratio = AVG_SATISFACTORY_ARRIVAL_TIME / arrival_time
 
-                satisfaction_score = clamp(random.gauss(6 * ratio, 2), 1, 10)
+                satisfaction_score = clamp(int(random.gauss(6 * ratio, 2)), 1, 10)
                 # satisfaction_score = 8
 
                 self.assigned_incident.victim_satisfaction = satisfaction_score

@@ -7,9 +7,6 @@ from incident import Incident, IncidentTeamAssignments, VictimGroups
 from person import Officer, Victim
 from places import RandomPlaceGenerator
 from team import Team, TeamOfficersAssignment
-from utils.constants import AVERAGE_TEAM_TIME, AVG_INSPECTIONS_SPAN
-from utils.constants import AVERAGE_TEAM_TIME, AVG_INSPECTIONS_SPAN
-from utils.helpers import calculate_distance, random_range, clamp
 from utils.constants import AVERAGE_TEAM_TIME
 from utils.helpers import calculate_distance, clamp, random_range
 from utils.position import Position
@@ -50,8 +47,8 @@ class Generator:
 
         self.cities.append(
             City(
-                "Gdansk",
-                Position(54.44725173693497, 18.44234779682661),
+                "Gdańsk",
+                Position(54.4473, 18.44234779682661),
                 Position(54.2749, 18.9362),
             )
         )
@@ -59,7 +56,7 @@ class Generator:
             City("Warszawa", Position(52.3657, 20.8515), Position(52.1033, 21.2690))
         )
         self.cities.append(
-            City("Krakow", Position(50.1233, 19.8094), Position(49.9737, 20.2150))
+            City("Kraków", Position(50.1233, 19.8094), Position(49.9737, 20.2150))
         )
 
         self.place_gen = RandomPlaceGenerator()
@@ -195,7 +192,9 @@ class Generator:
 
                 for officer in chosen_officers:
                     officer.team = team
-                    team_officer_pair = TeamOfficersAssignment(team.team_id, officer.officer_id)
+                    team_officer_pair = TeamOfficersAssignment(
+                        team.team_id, officer.officer_id
+                    )
                     self.team_officer_assignments.append(team_officer_pair)
             # else:
             # print("No more available officers")
