@@ -59,9 +59,9 @@ type_code, description
 67, Offer a bribe to executive officer
 68, Unauthorized use of a movable
 69, Deter/resist executive officer (other than peace officer)
-69, Possession of stolen goods
+70, Possession of stolen goods
 71, Issuing worthless checks
-71, Threaten injury to school officer or employee
+71A, Threaten injury to school officer or employee
 72, Forgery
 80, Carnal knowledge of juvenile
 81, Indecent behavior with juvenile
@@ -87,8 +87,8 @@ type_code, description
 137(a), Offer bribe to influence testimony
 146a, Impersonating a peace officer
 148, Interfering with an officer
-148, Resisting Arrest
 148.1, False report of a bomb
+148.2, Resisting Arrest
 148.5, False report of a crime
 150, Refuse to aid an officer
 151(A1), Advocate killing/injuring officer
@@ -130,12 +130,12 @@ type_code, description
 273.5A, Corporal injury to spouse/cohabitant
 273A, Child neglect
 273D, Corporal injury upon child
-273D, Wife beating - Felony
+273E, Wife beating - Felony
 278, Child abduction from parent or guardian
 285, Sex crimes against family member(s)
 288, Lewd Conduct / Felony sex offense
-288, Sex offense against a child
 288A, Oral copulation
+288B, Sex offense against a child
 290, Sex registration
 311, Loud and Obscene
 311.2A, Possession of obscene matter
@@ -143,7 +143,7 @@ type_code, description
 314, Indecent exposure
 330, Gambling
 373, Public nuisance misdemeanors (spitting in public places - etc.)
-374B, Garbage dumping
+374, Garbage dumping
 374B, Illegal dumping
 390, Drunk
 390C, Drunk in Vehicle
@@ -183,18 +183,18 @@ type_code, description
 499B, Joyriding
 502, Drunk Driving
 503, Auto theft
-503, Embezzlement
+503A, Embezzlement
 504, Tampering with a vehicle
 505, Reckless driving
 507, Public nuisance
 510, Speeding or racing vehicles
 537, Defrauding Innkeeper
-537, Nonpayment of a bill (Restaurants - etc.)
+537A, Nonpayment of a bill (Restaurants - etc.)
 537E, Article with serial number removed
 555, Posted trespass
 586, Illegal parking
 586E, Vehicle blocking Driveway
 594, Malicious mischief
-594, Vandalism
+594A, Vandalism
 595, Runaway car
 597, Killing or abusing animals
