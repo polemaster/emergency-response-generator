@@ -5,8 +5,9 @@ import os
 class Exporter:
     def __init__(self, generator, directory, include_headers=True):
         self.directory = directory
+        os.makedirs(directory, exist_ok=True)
         self.generator = generator
-        self.include_headers = include_headers  # TODO: add this functionality
+        self.include_headers = include_headers
 
     def export_all(self):
         self.export_incidents("incidents.csv")
@@ -36,29 +37,27 @@ class Exporter:
             "type_code",
         ]
 
-        attribute_functions = {
-            "latitude": lambda inc: inc.position.lat,
-            "longitude": lambda inc: inc.position.lng,
-        }
+        with open(filepath, "w", newline="") as csvfile:
+            writer = csv.writer(csvfile)
 
-        self.write_objects_to_csv(
-            self.generator.incidents, headers, filepath, attribute_functions
-        )
-        # with open(filepath, "w", newline="") as csvfile:
-        #     writer = csv.writer(csvfile)
+            if self.include_headers:
+                writer.writerow(headers)
 
-        #     if self.include_headers:
-        #         writer.writerow(headers)
+            for incident in self.generator.incidents:
+                row_data = [
+                    incident.incident_id,
+                    incident.city,
+                    incident.district,
+                    incident.position.lat,
+                    incident.position.lng,
+                    incident.report_datetime,
+                    incident.arrival_datetime,
+                    incident.victim_satisfaction,
+                    incident.type_code,
+                ]
+                writer.writerow(row_data)
 
-        #     for incident in self.generator.vehicles:
-        #         row_data = [
-        #             incident.incident_id,
-        #         ]
-        #         writer.writerow(row_data)
-
-    def write_objects_to_csv(
-        self, objects_list, headers, csv_filename, attribute_functions=[]
-    ):
+    def write_objects_to_csv(self, objects_list, headers, csv_filename):
         # Open the CSV file in write mode
         with open(csv_filename, "w", newline="") as csvfile:
             # Create a CSV writer object
@@ -69,16 +68,9 @@ class Exporter:
                 writer.writerow(headers)
 
             # Iterate over each object in the list and write its data to the CSV file
-            row_data = []
             for obj in objects_list:
-                for attribute in headers:
-                    if attribute in attribute_functions:
-                        value = attribute_functions[attribute](obj)
-                    else:
-                        value = getattr(obj, attribute)
-                    row_data.append(value)
                 # Extract values for the specified columns
-                # row_data = [getattr(obj, column) for column in headers]
+                row_data = [getattr(obj, column) for column in headers]
                 writer.writerow(row_data)
 
     def export_vehicles_sql(self, filename):
