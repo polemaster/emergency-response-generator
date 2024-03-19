@@ -18,7 +18,7 @@ def generate_random_date(start_date, end_date):
     return random_date
 
 
-def generate_licence_plate():
+def generate_license_plate():
     chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     nums = "0123456789"
 

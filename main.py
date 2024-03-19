@@ -28,7 +28,7 @@ def main():
     start = time.time()
 
     # write_incidents_to_csv(generator.incidents, "generated_data/incidents.csv")
-    exp = Exporter(generator, "generated_data")
+    exp = Exporter(generator, "generated_data", False)
     exp.export_all()
 
     end = time.time()

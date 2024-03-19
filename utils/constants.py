@@ -59,4 +59,5 @@ RANKS = [
 ]
 
 # load incident types
-CODES = pd.read_csv("data/codes.csv")
+CODES_FILEPATH = "data/codes.csv"
+CODES = pd.read_csv(CODES_FILEPATH)
