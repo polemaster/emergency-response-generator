@@ -16,7 +16,7 @@ from utils.constants import (
 )
 from utils.helpers import (
     clamp,
-    generate_licence_plate,
+    generate_license_plate,
     generate_random_date,
     random_range,
 )
@@ -26,7 +26,7 @@ from utils.position import Position
 class Vehicle:
     def __init__(self, city, current_time):
 
-        self.license_plate_number = generate_licence_plate()
+        self.license_plate_number = generate_license_plate()
 
         # "car" or "motorbike"
         # self.vehicle_type = vehicle_type
@@ -203,10 +203,12 @@ class Motorbike(Vehicle):
 
 
 class VehiclePosition:
-    def __init__(self, vehicle, position, time):
-        self.vehicle = vehicle
-        self.position = position
-        self.time = time
+    def __init__(self, id, vehicle, latitude, longitude, time):
+        self.vehicle_position_id = id
+        self.license_plate_number = vehicle
+        self.latitude = latitude
+        self.longitude = longitude
+        self.at_time = time
 
 
 car_brands = {
