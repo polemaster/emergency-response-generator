@@ -26,6 +26,7 @@ class Exporter:
         self.copy_incident_types("incident_types.csv")
         self.export_victim_groups("victim_groups.csv")
         self.export_incident_team_assignments("incident_team_assignments.csv")
+        self.export_team_officer_assignments_sql("team_officer_assignments_sql.csv")
 
     def export_incidents(self, filename):
         filepath = os.path.join(self.directory, filename)
@@ -156,7 +157,13 @@ class Exporter:
         headers = ["team_id", "start_datetime", "end_datetime", "license_plate_number"]
 
         self.write_objects_to_csv(self.generator.teams, headers, filepath)
+        
+    def export_team_officer_assignments_sql(self, filename):
+        filepath = os.path.join(self.directory, filename)
+        headers = ["team_id", "officer_id"]
 
+        self.write_objects_to_csv(self.generator.team_officer_assignments, headers, filepath)
+  
     def export_victims_sql(self, filename):
         filepath = os.path.join(self.directory, filename)
         headers = ["victim_id", "first_name", "last_name"]
