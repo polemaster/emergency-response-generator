@@ -94,7 +94,6 @@ class Generator:
             incident.victims.append(victim)
 
     def update_vehicles_data(self):
-    def update_vehicles_data(self):
         for vehicle in self.vehicles:
             self.vehicle_positions.append(
                 VehiclePosition(
