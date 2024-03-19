@@ -7,7 +7,7 @@ from incident import Incident, IncidentTeamAssignments, VictimGroups
 from person import Officer, Victim
 from places import RandomPlaceGenerator
 from team import Team, TeamOfficersAssignment
-from utils.constants import AVERAGE_TEAM_TIME
+from utils.constants import AVERAGE_TEAM_TIME, AVG_INSPECTIONS_SPAN
 from utils.helpers import calculate_distance, clamp, random_range
 from utils.position import Position
 from vehicle import Car, Motorbike, VehiclePosition
@@ -102,6 +102,12 @@ class Generator:
                     self.current_time,
                 )
             )
+
+            if vehicle.time_till_inspection <= 0:
+              vehicle.last_inspection = self.current_time.date()
+              vehicle.time_till_inspection = random_range(int(AVG_INSPECTIONS_SPAN * 0.75), int(AVG_INSPECTIONS_SPAN * 1.25), 1)
+            else:
+              vehicle.time_till_inspection -= self.simulation_timestep
 
     def count_vehicles(self):
         assigned = 0
