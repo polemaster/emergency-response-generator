@@ -12,6 +12,7 @@ from utils.constants import (
     MERCATOR_PER_METER,
     OLDEST_CAR_YEAR,
     RANDOM_POS_STEP,
+    AVG_INSPECTIONS_SPAN
 )
 from utils.helpers import (
     clamp,
@@ -44,7 +45,7 @@ class Vehicle:
 
         self.last_inspection = (
             self.manufacturing_year
-        )  # TODO: change last_inspection to date (not datetime)
+        ).date()  # TODO: change last_inspection to date (not datetime)
 
         self.assigned_incident = None
         self.is_resolving_incident = False
@@ -55,6 +56,8 @@ class Vehicle:
 
         # In seconds, 0 = to be freed
         self.team_time = 0
+        
+        self.time_till_inspection = random_range(int(AVG_INSPECTIONS_SPAN * 0.75), int(AVG_INSPECTIONS_SPAN * 1.25), 1)
 
     def move_vehicle(self, simulation_timestep, current_time):
         if self.team is None:
