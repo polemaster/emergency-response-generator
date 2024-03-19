@@ -21,7 +21,6 @@ class Incident:
         self.report_datetime = incident_datetime
         self.arrival_datetime = None
         self.victim_satisfaction = None
-        self.incident_type = None
         self.position = position
         self.type_code = CODES["type_code"].sample().values[0]
 

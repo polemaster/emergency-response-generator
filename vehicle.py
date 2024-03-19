@@ -13,7 +13,12 @@ from utils.constants import (
     OLDEST_CAR_YEAR,
     RANDOM_POS_STEP,
 )
-from utils.helpers import generate_licence_plate, generate_random_date, random_range, clamp
+from utils.helpers import (
+    clamp,
+    generate_licence_plate,
+    generate_random_date,
+    random_range,
+)
 from utils.position import Position
 
 
@@ -37,7 +42,9 @@ class Vehicle:
         position = Position(lat, lng)
         self.position = position
 
-        self.last_inspection = self.manufacturing_year
+        self.last_inspection = (
+            self.manufacturing_year
+        )  # TODO: change last_inspection to date (not datetime)
 
         self.assigned_incident = None
         self.is_resolving_incident = False
@@ -117,9 +124,12 @@ class Vehicle:
                 distances_ratio = dist_to_incident / step_distance
 
                 latest_timepoint = current_time
-                
-                if self.assigned_incident.report_datetime and self.assigned_incident.report_datetime > current_time:
-                  latest_timepoint = self.assigned_incident.report_datetime
+
+                if (
+                    self.assigned_incident.report_datetime
+                    and self.assigned_incident.report_datetime > current_time
+                ):
+                    latest_timepoint = self.assigned_incident.report_datetime
 
                 self.assigned_incident.arrival_datetime = latest_timepoint + timedelta(
                     seconds=simulation_timestep * distances_ratio
@@ -156,10 +166,10 @@ class Vehicle:
                     self.assigned_incident.arrival_datetime
                     - self.assigned_incident.report_datetime
                 ).seconds
-                
+
                 # Prevent arrival_time == 0
                 if arrival_time == 0:
-                  arrival_time = 1
+                    arrival_time = 1
 
                 ratio = AVG_SATISFACTORY_ARRIVAL_TIME / arrival_time
 
