@@ -178,7 +178,7 @@ class Exporter:
 
     def export_officers_sql(self, filename):
         filepath = os.path.join(self.directory, filename)
-        headers = ["officer_id", "first_name", "last_name", "team"]
+        headers = ["officer_id", "first_name", "last_name"]
 
         self.write_objects_to_csv(self.generator.officers, headers, filepath)
 
