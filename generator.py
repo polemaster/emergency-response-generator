@@ -7,6 +7,8 @@ from incident import Incident, IncidentTeamAssignments, VictimGroups
 from person import Officer, Victim
 from places import RandomPlaceGenerator
 from team import Team
+from utils.constants import AVERAGE_TEAM_TIME, AVG_INSPECTIONS_SPAN
+from utils.helpers import calculate_distance, random_range, clamp
 from utils.constants import AVERAGE_TEAM_TIME
 from utils.helpers import calculate_distance, clamp, random_range
 from utils.position import Position
@@ -90,7 +92,7 @@ class Generator:
             self.victims.append(victim)
             incident.victims.append(victim)
 
-    def save_vehicle_positions(self):
+    def update_vehicles_data(self):
         for vehicle in self.vehicles:
             self.vehicle_positions.append(
                 VehiclePosition(
@@ -266,7 +268,7 @@ class Generator:
         self.current_time = start_datetime
 
         for _ in range(iterations):
-            self.save_vehicle_positions()
+            self.update_vehicles_data()
 
             self.generate_incidents()
             self.move_vehicles()
