@@ -173,7 +173,6 @@ class Vehicle:
                 self.assigned_incident = None
 
                 # TODO Move proportionally to the time left
-                # TODO Update incident with satisfaction score
 
 
 class Car(Vehicle):
