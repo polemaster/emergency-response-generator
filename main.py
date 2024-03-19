@@ -1,6 +1,7 @@
 import random
 from datetime import datetime
 
+from exporter import Exporter
 from generator import Generator
 from utils.constants import INITIAL_COUNTS
 
@@ -23,6 +24,15 @@ def main():
 
     end = time.time()
     print("Time:", end - start)
+
+    start = time.time()
+
+    # write_incidents_to_csv(generator.incidents, "generated_data/incidents.csv")
+    exp = Exporter(generator, "generated_data")
+    exp.export_all()
+
+    end = time.time()
+    print("Time exporting:", end - start)
 
 
 if __name__ == "__main__":
