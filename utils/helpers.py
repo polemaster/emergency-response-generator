@@ -18,12 +18,13 @@ def generate_random_date(start_date, end_date):
     return random_date
 
 
-def generate_license_plate():
+def generate_license_plate(city):
     chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     nums = "0123456789"
-
+    
     return "".join(
-        [random.choice(chars) for i in range(3)]
+        [city.city_name[0]]
+        + [random.choice(chars) for i in range(2)]
         + [random.choice(nums) for i in range(3)]
         + [random.choice(chars) for i in range(2)]
     )

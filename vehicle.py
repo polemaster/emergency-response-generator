@@ -26,7 +26,7 @@ from utils.position import Position
 class Vehicle:
     def __init__(self, city, current_time):
 
-        self.license_plate_number = generate_license_plate()
+        self.license_plate_number = generate_license_plate(city)
 
         # "car" or "motorbike"
         # self.vehicle_type = vehicle_type
