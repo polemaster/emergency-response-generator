@@ -1,5 +1,15 @@
+from datetime import datetime
+
 import pandas as pd
 from numpy import loadtxt
+
+NUMBER_OF_TUPLES = 10000
+
+START_DATE = datetime(2023, 1, 1)
+
+SEED = 42
+SIMULATION_TIMESTEP = 600
+INCIDENTS_PER_HOUR = 16
 
 # In order of cities
 INITIAL_COUNTS = {
@@ -15,7 +25,7 @@ MERCATOR_PER_METER = 2.245789145352464e-6
 RANDOM_POS_STEP = MERCATOR_PER_METER * 30
 
 # In seconds => 25 minutes
-INCIDENT_RESOLUTION_TIME = 1500 
+INCIDENT_RESOLUTION_TIME = 1500
 
 # All 3 in years
 MIN_OFFICER_AGE = 21
@@ -32,8 +42,8 @@ DEFAULT_VEHICLE_SPEED = 14
 # Average time between inspections in seconds
 AVG_INSPECTIONS_SPAN = int(1.2 * 365 * 24 * 3600)
 
-# In seconds => 8h 
-AVERAGE_TEAM_TIME = 28800 
+# In seconds => 8h
+AVERAGE_TEAM_TIME = 28800
 
 # load names
 NAMES_MALE = loadtxt("./data/polish_male_firstnames.txt", dtype="str")

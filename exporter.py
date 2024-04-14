@@ -1,6 +1,5 @@
 import csv
 import os
-import shutil
 
 from utils.constants import CODES
 
