@@ -234,6 +234,7 @@ class Generator:
         else:
             print("All vehicles are currently occupied")
 
+    
     def generate_incidents(self):
         avarage_incidents = self.simulation_timestep / 3600 * self.incidents_per_hour
         # Here, we generate incidents count for current timestamp (+- 50%)
@@ -259,22 +260,26 @@ class Generator:
                 self.assign_vehicle_to_incident(incident)
 
             self.incidents.append(incident)
+            
+        return incidents_count
 
-    def simulate(self, start_datetime, end_datetime):
-        time_diff = end_datetime - start_datetime
-        iterations = int(time_diff.total_seconds() / self.simulation_timestep)
-
+    def simulate(self, start_datetime, facts_rows_number):
         timestep = timedelta(seconds=self.simulation_timestep)
 
         self.current_time = start_datetime
 
-        for _ in range(iterations):
+        incidents_count = 0
+        while True:
             self.update_vehicles_data()
 
-            self.generate_incidents()
+            incidents_count += self.generate_incidents()
             self.move_vehicles()
 
             self.update_teams()
             self.assign_teams()
 
             self.current_time += timestep
+            
+            if incidents_count >= facts_rows_number:
+                print(f"Simulation ended at {self.current_time}")
+                break
