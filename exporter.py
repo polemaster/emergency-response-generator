@@ -2,11 +2,14 @@ import csv
 import os
 import shutil
 
-from utils.constants import CODES, CODES_FILEPATH
+from utils.constants import CODES
 
 
 class Exporter:
     def __init__(self, generator, directory, include_headers=False):
+        # directory: directory to use for generated/exported data
+        # include_headers: states whether headers in csv files for sql db be generated
+
         self.directory = directory
         # create a directory if it doesn't already exist
         os.makedirs(directory, exist_ok=True)

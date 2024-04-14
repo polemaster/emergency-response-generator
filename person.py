@@ -35,7 +35,7 @@ def generate_personal_info():
 
 
 class Officer:
-    def __init__(self, id, city, current_time):
+    def __init__(self, id, city, current_time, emails):
 
         personal_info = generate_personal_info()
 
@@ -56,7 +56,11 @@ class Officer:
         self.gender = personal_info["gender"]
         self.date_of_birth = date_of_birth
         self.hire_date = hire_date
-        self.email = "officer{}@police.org.pl".format(id)
+        email = f"{self.first_name}.{self.last_name}@police.org.pl"
+        if email not in emails:
+            self.email = email
+        else:
+            self.email = f"{self.first_name}.{self.last_name}{id}@police.org.pl"
         self.phone_number = generate_phone_number()
 
         self.city = city

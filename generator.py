@@ -57,10 +57,12 @@ class Generator:
         self.place_gen = RandomPlaceGenerator()
 
     def generate_initial_data(self):
+        emails = []
         for c_i, city in enumerate(self.cities):
             for i in range(0, self.initial_counts["officers"][c_i]):
-                officer = Officer(i, city, self.current_time)
+                officer = Officer(i, city, self.current_time, emails)
                 self.officers.append(officer)
+                emails.append(officer.email)
 
             for i in range(0, self.initial_counts["cars"][c_i]):
                 car = Car(city, self.current_time)
@@ -99,10 +101,14 @@ class Generator:
             )
 
             if vehicle.time_till_inspection <= 0:
-              vehicle.last_inspection = self.current_time.date()
-              vehicle.time_till_inspection = random_range(int(AVG_INSPECTIONS_SPAN * 0.75), int(AVG_INSPECTIONS_SPAN * 1.25), 1)
+                vehicle.last_inspection = self.current_time.date()
+                vehicle.time_till_inspection = random_range(
+                    int(AVG_INSPECTIONS_SPAN * 0.75),
+                    int(AVG_INSPECTIONS_SPAN * 1.25),
+                    1,
+                )
             else:
-              vehicle.time_till_inspection -= self.simulation_timestep
+                vehicle.time_till_inspection -= self.simulation_timestep
 
     def count_vehicles(self):
         assigned = 0
@@ -182,7 +188,7 @@ class Generator:
                     chosen_officers,
                 )
                 vehicle.team = team
-                
+
                 # +- 25%
                 vehicle.team_time = random_range(
                     AVERAGE_TEAM_TIME * 0.75, AVERAGE_TEAM_TIME * 1.25, 4000
