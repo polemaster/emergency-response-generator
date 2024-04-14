@@ -40,11 +40,6 @@ class Generator:
 
         self.cities = list()
 
-        # city, top_left_latitude, top_left_longitude, bottom_right_latitude,  bottom_right_longitude
-        # Gdańsk: 54.44725173693497,  18.44234779682661,  54.2749,  18.9362
-        # Warszawa: 52.3657,  20.8515,  52.1033,  21.2690
-        # Kraków: 50.1233, 19.8094,  49.9737,  20.2150
-
         self.cities.append(
             City(
                 "Gdańsk",
@@ -141,15 +136,12 @@ class Generator:
         for vehicle in self.vehicles:
             if vehicle.team is not None:
                 if vehicle.team_time <= 0:
-                    # FIX END DATE could be varying within timestep
                     vehicle.team.end_datetime = self.current_time
-                    # print("team disapears at ", vehicle.team.end_datetime)
 
                     for officer in vehicle.team.officers:
                         officer.team = None
 
                     vehicle.team = None
-                    # TODO Could add some cooldown for the vehicle
                 else:
                     vehicle.team_time -= self.simulation_timestep
 
@@ -167,7 +159,6 @@ class Generator:
 
         if officer_count <= len(available):
             for i in range(officer_count):
-                # print(len(available))
                 team.append(available[i])
         else:
             for officer in available:
@@ -191,6 +182,8 @@ class Generator:
                     chosen_officers,
                 )
                 vehicle.team = team
+                
+                # +- 25%
                 vehicle.team_time = random_range(
                     AVERAGE_TEAM_TIME * 0.75, AVERAGE_TEAM_TIME * 1.25, 4000
                 )
@@ -202,17 +195,13 @@ class Generator:
                         team.team_id, officer.officer_id
                     )
                     self.team_officer_assignments.append(team_officer_pair)
-            # else:
-            # print("No more available officers")
-        # else:
-        #   print("vehicle is full")
 
     def assign_teams(self):
         for vehicle in self.vehicles:
             self.assign_team(vehicle)
 
     def assign_vehicle_to_incident(self, incident):
-        closest_vehicle = None  # self.vehicles[0]
+        closest_vehicle = None
         closest_dist = 0
 
         for vehicle in self.vehicles:
@@ -241,14 +230,12 @@ class Generator:
 
     def generate_incidents(self):
         avarage_incidents = self.simulation_timestep / 3600 * self.incidents_per_hour
-        # Here, higher random range of 50%
+        # Here, we generate incidents count for current timestamp (+- 50%)
         incidents_count = int(
             random_range(int(avarage_incidents * 0.5), int(avarage_incidents * 1.5))
         )
-        # print(incidents_count)
 
         for _ in range(incidents_count):
-            # TODO Should add victims to incident
 
             incident = Incident(
                 len(self.incidents),
@@ -261,7 +248,6 @@ class Generator:
             required_teams_count = clamp(
                 np.random.poisson(lam=0.3, size=1)[0] + 1, 1, 3
             )
-            # print(required_teams_count)
 
             for _ in range(required_teams_count):
                 self.assign_vehicle_to_incident(incident)

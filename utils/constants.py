@@ -8,12 +8,14 @@ INITIAL_COUNTS = {
     "motorbikes": [10, 15, 5],
 }
 
+# Ratio representing 1 meter in latitude/longitude scale
 MERCATOR_PER_METER = 2.245789145352464e-6
 
 # 30 meters
 RANDOM_POS_STEP = MERCATOR_PER_METER * 30
 
-INCIDENT_RESOLUTION_TIME = 1500  # 25 minutes
+# In second => 25 minutes
+INCIDENT_RESOLUTION_TIME = 1500 
 
 
 MIN_OFFICER_AGE = 21
@@ -24,11 +26,14 @@ MAX_OFFICER_HIRE_TIME = 35
 OLDEST_CAR_YEAR = 10
 EARLIEST_CAR_YEAR = 1
 
+# In m/s => ~50km/h
+DEFAULT_VEHICLE_SPEED = 14
 
-DEFAULT_VEHICLE_SPEED = 14  # m/s
+# Average time between inspections in seconds
 AVG_INSPECTIONS_SPAN = int(1.2 * 365 * 24 * 3600)
 
-AVERAGE_TEAM_TIME = 28800  # In seconds +- 50%
+# In seconds => 8h 
+AVERAGE_TEAM_TIME = 28800 
 
 # load names
 NAMES_MALE = loadtxt("./data/polish_male_firstnames.txt", dtype="str")

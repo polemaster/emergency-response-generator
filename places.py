@@ -159,20 +159,3 @@ class RandomPlaceGenerator:
         selected_point = generate_random_point(selected_rectangle)
 
         return (selected_city.name, selected_district.name, selected_point)
-
-
-def main():
-    g = RandomPlaceGenerator()
-
-    print(g.district_weights[("Gdańsk", "Nowy Port")])
-
-    places = []
-    for _ in range(100):
-        place = g.select_random_place()
-        if place[0] == "Gdańsk":
-            places.append(place[1])
-    print(places)
-
-
-if __name__ == "__main__":
-    main()

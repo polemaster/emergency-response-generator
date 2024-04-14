@@ -26,7 +26,6 @@ class Vehicle:
         self.license_plate_number = generate_license_plate(city)
 
         # "car" or "motorbike"
-        # self.vehicle_type = vehicle_type
         self.brand = None
         self.model = None
         self.manufacturing_year = generate_random_date(
@@ -34,7 +33,6 @@ class Vehicle:
             current_time - timedelta(days=EARLIEST_CAR_YEAR * 365),
         )
 
-        # FIX it - just an testing position
         lng = random_range(city.top_left.lng, city.bottom_right.lng, 10000)
         lat = random_range(city.bottom_right.lat, city.top_left.lat, 10000)
         position = Position(lat, lng)
@@ -42,7 +40,7 @@ class Vehicle:
 
         self.last_inspection = (
             self.manufacturing_year
-        ).date()  # TODO: change last_inspection to date (not datetime)
+        ).date()
 
         self.assigned_incident = None
         self.is_resolving_incident = False
@@ -51,7 +49,7 @@ class Vehicle:
         self.team = None
         self.city = city
 
-        # In seconds, 0 = to be freed
+        # In seconds, 0 = team should be freed / stop existing live (only historicaly)
         self.team_time = 0
 
         self.time_till_inspection = random_range(
@@ -83,7 +81,6 @@ class Vehicle:
                 * RANDOM_POS_STEP
             )
 
-            # print(DELTA_MERCATOR_MAIN)
             if axis:
                 delta_lng = distance * direction
             else:
@@ -97,7 +94,7 @@ class Vehicle:
                 or self.position.lat + delta_lat < self.city.bottom_right.lat
                 or self.position.lat + delta_lat > self.city.top_left.lat
             ):
-                # We inverse the direction
+                # If leaving the city => We inverse the direction
                 direction = -1 * direction
 
             self.position.lng += delta_lng
@@ -122,7 +119,7 @@ class Vehicle:
                 self.position.lat = self.assigned_incident.position.lat
                 self.position.lng = self.assigned_incident.position.lng
 
-                # Calculate arrival time depending on travelled distance to distance to incident proportions
+                # Calculates arrival time depending on travelled distance to distance to incident proportions
                 distances_ratio = dist_to_incident / step_distance
 
                 latest_timepoint = current_time
@@ -142,7 +139,6 @@ class Vehicle:
                     INCIDENT_RESOLUTION_TIME * 0.5, INCIDENT_RESOLUTION_TIME * 1.5
                 )
 
-                # print("Stop and handle incident, time left: ", vehicle.time_till_resolved)
             else:
                 dir_lat = d_lat / dist_to_incident
                 dir_lng = d_lng / dist_to_incident
@@ -150,17 +146,12 @@ class Vehicle:
                 self.position.lat += dir_lat * step_distance
                 self.position.lng += dir_lng * step_distance
 
-                # print("Moved, distance to incident = ", dist_to_incident)
         elif self.assigned_incident is not None and self.is_resolving_incident:
             # Is resolving incident
             self.time_till_resolved -= simulation_timestep
 
-            # print("counter decreases, time left = {}".format(vehicle.time_till_resolved))
-
             if self.time_till_resolved <= 0:
                 # Resolved Incident
-
-                # print("Incident nr {} resolved".format(vehicle.assigned_incident.incident_id))
 
                 # In seconds 30min => 1800s
                 AVG_SATISFACTORY_ARRIVAL_TIME = 1200
@@ -169,23 +160,19 @@ class Vehicle:
                     - self.assigned_incident.report_datetime
                 ).seconds
 
-                # Prevent arrival_time == 0
+                # Prevent division by 0
                 if arrival_time == 0:
                     arrival_time = 1
 
                 ratio = AVG_SATISFACTORY_ARRIVAL_TIME / arrival_time
 
                 satisfaction_score = clamp(int(random.gauss(6 * ratio, 2)), 1, 10)
-                # satisfaction_score = 8
 
                 self.assigned_incident.victim_satisfaction = satisfaction_score
 
                 self.time_till_resolved = 0
                 self.is_resolving_incident = False
                 self.assigned_incident = None
-
-                # TODO Move proportionally to the time left
-
 
 class Car(Vehicle):
     def __init__(self, city, current_time):

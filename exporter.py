@@ -140,8 +140,6 @@ class Exporter:
                 ]
                 writer.writerow(row_data)
 
-        # self.write_objects_to_csv(self.generator.vehicle_positions, headers, filepath)
-
     def export_teams(self, filename):
         filepath = os.path.join(self.directory, filename)
         headers = ["team_id", "start_datetime", "end_datetime", "license_plate_number"]

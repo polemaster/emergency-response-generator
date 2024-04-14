@@ -51,7 +51,3 @@ def clamp(n, min, max):
         return max
     else:
         return n
-
-
-if __name__ == "__main__":
-    print(generate_phone_number())
