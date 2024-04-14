@@ -1,6 +1,3 @@
-# In seconds +- 50%
-# 25 minutes
-
 import math
 import random
 from datetime import timedelta
