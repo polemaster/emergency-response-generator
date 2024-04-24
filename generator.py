@@ -58,9 +58,11 @@ class Generator:
 
     def generate_initial_data(self):
         emails = []
+        officers_i = 0
         for c_i, city in enumerate(self.cities):
+            
             for i in range(0, self.initial_counts["officers"][c_i]):
-                officer = Officer(i, city, self.current_time, emails)
+                officer = Officer(officers_i+i, city, self.current_time, emails)
                 self.officers.append(officer)
                 emails.append(officer.email)
 
@@ -71,6 +73,8 @@ class Generator:
             for i in range(0, self.initial_counts["motorbikes"][c_i]):
                 motorbike = Motorbike(city, self.current_time)
                 self.vehicles.append(motorbike)
+                
+            officers_i += self.initial_counts["officers"][c_i]
 
     def move_vehicles(self):
         for vehicle in self.vehicles:
