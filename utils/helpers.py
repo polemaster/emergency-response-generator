@@ -1,7 +1,7 @@
 import math
 import random
 from datetime import timedelta
-
+from utils.constants import MERCATOR_PER_METER
 
 def generate_phone_number():
     first_digit = random.choice(["4", "5", "6", "7", "8"])
@@ -39,9 +39,21 @@ def random_range(start, end, INTERNAL_SUBSTEPS=1000):
         / INTERNAL_SUBSTEPS
     )
 
+def latlngToMeters(lat, lng):
+    "Convert lat,lng degrees to meters in Web Mercator projection. 0,0 is at top left corner"
+    radius = 6378137.0 # WGS84 equatorial radius (meters) - used in spherical projection
+    
+    lat = math.radians(lat)
+    lng = math.radians(lng)
+    x = radius * (math.pi + lng)
+    y = radius * (math.pi - math.log(math.tan(math.pi/4 + lat/2)))
+    return x, y
 
 def calculate_distance(pos_1, pos_2):
-    return math.sqrt((pos_1.lat - pos_2.lat) ** 2 + (pos_1.lng - pos_2.lng) ** 2)
+    x_1, y_1 = latlngToMeters(pos_1.lat, pos_1.lng)
+    x_2, y_2 = latlngToMeters(pos_2.lat, pos_2.lng)
+    
+    return math.sqrt((x_1 - x_2) ** 2 + (y_1 - y_2) ** 2)
 
 
 def clamp(n, min, max):

@@ -10,7 +10,7 @@ from team import Team, TeamOfficersAssignment
 from utils.constants import AVERAGE_TEAM_TIME, AVG_INSPECTIONS_SPAN
 from utils.helpers import calculate_distance, clamp, random_range
 from utils.position import Position
-from vehicle import Car, Motorbike, VehiclePosition
+from vehicle import Car, Motorbike
 
 
 class Generator:
@@ -94,15 +94,6 @@ class Generator:
 
     def update_vehicles_data(self):
         for vehicle in self.vehicles:
-            self.vehicle_positions.append(
-                VehiclePosition(
-                    len(self.vehicle_positions),
-                    vehicle.license_plate_number,
-                    vehicle.position.lat,
-                    vehicle.position.lng,
-                    self.current_time,
-                )
-            )
 
             if vehicle.time_till_inspection <= 0:
                 vehicle.last_inspection = self.current_time.date()
@@ -213,12 +204,13 @@ class Generator:
     def assign_vehicle_to_incident(self, incident):
         closest_vehicle = None
         closest_dist = 0
-
+        
         for vehicle in self.vehicles:
             if (
                 vehicle.assigned_incident is None
                 and vehicle.team
                 and not vehicle.is_resolving_incident
+                and vehicle.city.city_name == incident.city
             ):
                 distance = calculate_distance(incident.position, vehicle.position)
 
@@ -235,6 +227,7 @@ class Generator:
                 incident.incident_id, closest_vehicle.team.team_id
             )
             self.incident_team_assignments.append(incident_team_assignment)
+            incident.initial_vehicle_distance = closest_dist
         else:
             print("All vehicles are currently occupied")
 

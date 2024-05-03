@@ -23,6 +23,8 @@ class Incident:
         self.victim_satisfaction = None
         self.position = position
         self.type_code = CODES["type_code"].sample().values[0]
+        
+        self.initial_vehicle_distance = None
 
         self.victims = list()
 

@@ -19,7 +19,6 @@ class Exporter:
         self.export_incidents("incidents.csv")
         self.export_vehicles_sql("vehicles_sql.csv")
         self.export_vehicles_csv("vehicles_csv.csv")
-        self.export_vehicle_positions("vehicle_positions.csv")
         self.export_teams("teams.csv")
         self.export_victims_sql("victims_sql.csv")
         self.export_victims_csv("victims_csv.csv")
@@ -41,6 +40,7 @@ class Exporter:
             "report_datetime",
             "arrival_datetime",
             "victim_satisfaction",
+            "initial_vehicle_distance",
             "type_code",
         ]
 
@@ -60,6 +60,7 @@ class Exporter:
                     incident.report_datetime,
                     incident.arrival_datetime,
                     incident.victim_satisfaction,
+                    incident.initial_vehicle_distance,
                     incident.type_code,
                 ]
                 writer.writerow(row_data)
