@@ -5,7 +5,7 @@ from numpy import loadtxt
 
 NUMBER_OF_TUPLES = 10000
 
-START_DATE = datetime(2023, 1, 1)
+START_DATE = datetime(2018, 1, 1)
 
 SEED = 42
 SIMULATION_TIMESTEP = 600

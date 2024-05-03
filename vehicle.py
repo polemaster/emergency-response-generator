@@ -39,7 +39,10 @@ class Vehicle:
         self.position = position
 
         self.last_inspection = (
-            self.manufacturing_year
+            generate_random_date(
+              current_time - timedelta(days=int(365 * 1.8)),
+              current_time - timedelta(days=int(365 * 0.7)),
+          )
         ).date()
 
         self.assigned_incident = None

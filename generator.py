@@ -260,10 +260,8 @@ class Generator:
             
         return incidents_count
 
-    def simulate(self, start_datetime, facts_rows_number):
+    def simulate(self, facts_rows_number):
         timestep = timedelta(seconds=self.simulation_timestep)
-
-        self.current_time = start_datetime
 
         incidents_count = 0
         while True:
